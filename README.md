@@ -13,6 +13,7 @@ PrettyTable -> pip3 install prettytable
 Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones que muestran en la documentación aquí. Y luego para instalar el conector corres el comando pip3 install mariadb.** pendiente     
 
 ### Pasos a seguir: 
+Crear 1 base de datos que será el esquema de las sucursales que hay y las tablas que tiene cada una.
 Crear las 2 bases de datos 2 tablas cada 1. Con 5 registros de prueba cada una.   
 Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.   
 
@@ -93,8 +94,10 @@ Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.
 
 
 ### Crear un código en python con el conector que pueda hacer desde la terminal:   
-Insertar nuevos clientes      
+Insertar nuevos clientes (en la base de datos local)      
 Actualizar    
-Buscar (deben poderse mostrar todos los clientes)   
+Buscar (deben poderse mostrar todos los clientes) (buscar de todas las sucursales al mismo tiempo)
+Insertar tabla:   
+La constraint que se me ocurre para que sea mucho más fácil y organizado es que las nuevas tablas estén obligadas a estar conectadas a la tabla 'Clientes' y únicamente a esa. Es decir la llave foránea de las nuevas tablas agregadas será siempre el id de 'Clientes'.
 
-
+### Crear función 
