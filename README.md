@@ -10,7 +10,7 @@ Bases de Datos Distribuidas
 MariaDB-server   
 Mysql-python-connector    mariadb-python-connector -> pip3 install mariadb    
 PrettyTable -> pip3 install prettytable    
-Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones que muestran en la documentación aquí. Y luego para instalar el conector corres el comando pip3 install mariadb.** pendiente     
+Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones que muestran en la documentación [aquí](https://mariadb.com/kb/en/about-mariadb-connector-c/#installing-with-apt-get). Y luego para instalar el conector corres el comando pip3 install mariadb.** pendiente     
 
 ### Pasos a seguir: 
 Crear 1 base de datos que será el esquema de las sucursales que hay y las tablas que tiene cada una.
