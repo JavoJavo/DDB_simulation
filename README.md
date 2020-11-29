@@ -12,14 +12,14 @@ Mysql-python-connector    mariadb-python-connector -> pip3 install mariadb
 PrettyTable -> pip3 install prettytable    
 Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones que muestran en la documentación aquí. Y luego para instalar el conector corres el comando pip3 install mariadb.** pendiente     
 
-Pasos a seguir: 
+### Pasos a seguir: 
 Crear las 2 bases de datos 2 tablas cada 1. Con 5 registros de prueba cada una.   
 Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.   
 
 CREATE DATABASE Morelia;   
 CREATE DATABASE Pátzcuaro;   
 (Meterse a cada base de datos para crear las 2 tablas en cada una.)   
-Tabla Direcciones:   
+#### Tabla Direcciones:   
 CREATE TABLE Direcciones (   
 IdDir INT NOT NULL AUTO_INCREMENT,     
 calle VARCHAR(100),    
@@ -31,7 +31,7 @@ CP CHAR(5),
 PRIMARY KEY(IdDir)   
 )    
 
-Tabla Clientes:   
+#### Tabla Clientes:   
 CREATE TABLE Clientes (   
 IdCli INT NOT NULL AUTO_INCREMENT,    
 Nombre VARCHAR(50),    
@@ -46,7 +46,7 @@ FOREIGN KEY (IdDir) REFERENCES Direcciones(IdDir)
     
    
    
-20 ejemplos(5 por cada tabla):   
+#### 20 ejemplos(5 por cada tabla):   
     
   
 (BD Morelia)    
@@ -84,7 +84,7 @@ INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VAL
 INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Martina','Alanis','Alarcón','VECS880326701',5);    
 INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Alejandro','Alayón','Alcázar','VECS880326031',4);     
 
-1.2 Hacer base de datos donde se almacenen los nombres de las sucursales:     
+#### 1.2 Hacer base de datos donde se almacenen los nombres de las sucursales:     
 	CREATE DATABASE sucursales;    
 	CREATE TABLE nombres (n VARCHAR(100));     
 	INSERT INTO nombres (n) VALUES ()     
@@ -92,7 +92,7 @@ INSERT INTO nombres (n) VALUES ('Morelia'),('Pátzcuaro')
 
 
 
-Crear un código en python con el conector que pueda hacer desde la terminal:   
+### Crear un código en python con el conector que pueda hacer desde la terminal:   
 Insertar nuevos clientes      
 Actualizar    
 Buscar (deben poderse mostrar todos los clientes)   
