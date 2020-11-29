@@ -96,8 +96,8 @@ Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.
 ### Crear un código en python con el conector que pueda hacer desde la terminal:   
 Insertar nuevos clientes (en la base de datos local)      
 Actualizar    
-Buscar (deben poderse mostrar todos los clientes) (buscar de todas las sucursales al mismo tiempo)
-Insertar tabla:   
+Buscar (deben poderse mostrar todos los clientes) (buscar de todas las sucursales al mismo tiempo)    
+Insertar tabla:      
 La constraint que se me ocurre para que sea mucho más fácil y organizado es que las nuevas tablas estén obligadas a estar conectadas a la tabla 'Clientes' y únicamente a esa. Es decir la llave foránea de las nuevas tablas agregadas será siempre el id de 'Clientes'.
 
 ### Crear función 
