@@ -49,15 +49,15 @@ Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.
 #### 20 ejemplos(5 por cada tabla):   
     
   
-(BD Morelia)    
-En tabla Direcciones:   
+#### (BD Morelia)    
+#### En tabla Direcciones:   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('San Benito', '556', 'Armando Madero','Morelia', 'Michoacán', '54954');    
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Cristobal Colón',  '84', 'Avante', 'Maravatío', 'Michoacán', '51682');   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Leona Vicario',  '68B', 'Josefa Ortiz de Dominquez', 'Morelia', 'Michoacán', '56921');   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Paseo de la República',  '599', 'Soledad', 'Morelia', 'Michoacán', '58088');   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Villa Olímpica','775','Valladolid','Morelia','Michoacán','45444');     
 
-En tabla Clientes:   
+#### En tabla Clientes:   
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Javier','Navarro','Espindola','VECJ880326001',1);    
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Armando','Villicaña','Gameza','VECJ880326801',4);   
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Karla','Herrera','Bilk','VECJ880326061',2);   
@@ -67,8 +67,8 @@ En tabla Clientes:
 
 
 
-(BD Pátzcuaro)   
-En tabla Direcciones:   
+#### (BD Pátzcuaro)   
+#### En tabla Direcciones:   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Batalla de Naco', '741', 'Juárez','Pátzcuaro', 'Michoacán', '54154');   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('La otra banda',  '15', 'Roma', 'Pátzcuaro', 'Michoacán', '11681');   
 	INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('Piedra del Comal',  '11', 'Polanco', 'Pátzcuaro', 'Michoacán', '51121');   
@@ -77,7 +77,7 @@ En tabla Direcciones:
 
 
 
-En tabla Clientes:   
+#### En tabla Clientes:   
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Hugo','Acosta','Acuña','VECS880326001',1);     
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Lucía','Aguilar','Aguirre','VECS880326801',2);     
 	INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('Daniel','Agustín','Ahumada','VECS880326061',3);    
