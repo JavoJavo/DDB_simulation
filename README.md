@@ -16,20 +16,20 @@ Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones 
 Crear las 2 bases de datos 2 tablas cada 1. Con 5 registros de prueba cada una.   
 Bases de datos: una se llama Morelia y la otra se llama Pátzcuaro.   
 
-CREATE DATABASE Morelia;   
-CREATE DATABASE Pátzcuaro;   
-(Meterse a cada base de datos para crear las 2 tablas en cada una.)   
-#### Tabla Direcciones:   
-CREATE TABLE Direcciones (   
-IdDir INT NOT NULL AUTO_INCREMENT,     
-calle VARCHAR(100),    
-numero VARCHAR(50),     
-colonia VARCHAR(100),    
-localidad VARCHAR(100),    
-estado VARCHAR(50),     
-CP CHAR(5),    
-PRIMARY KEY(IdDir)   
-)    
+	CREATE DATABASE Morelia;   
+	CREATE DATABASE Pátzcuaro;   
+	(Meterse a cada base de datos para crear las 2 tablas en cada una.)   
+	#### Tabla Direcciones:   
+	CREATE TABLE Direcciones (   
+	IdDir INT NOT NULL AUTO_INCREMENT,     
+	calle VARCHAR(100),    
+	numero VARCHAR(50),     
+	colonia VARCHAR(100),    
+	localidad VARCHAR(100),    
+	estado VARCHAR(50),     
+	CP CHAR(5),    
+	PRIMARY KEY(IdDir)   
+	)    
 
 #### Tabla Clientes:   
 CREATE TABLE Clientes (   
