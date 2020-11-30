@@ -1,9 +1,20 @@
 import mariadb
 #pip3 install prettytable
 from prettytable import PrettyTable
+import json
+
+PATH = ''
+
 
 #---------------------------------------------------
 # Funciones auxiliarles
+
+def dame_cursor_local(PATH):
+    with open(PATH+'config.json') as json_file:
+        config = json.load(json_file)
+    cnx = mariadb.connect(**config)
+    cursor = cnx.cursor()
+    return cursor
 
 def dame_sucursales():
     conn = mariadb.connect(
@@ -108,7 +119,7 @@ def actualizarDireccion(a, info):
 def consultar(a,info):
     print('Funcion pendiente')
     menu()
-
+'''
 def consultar_cliente(bd,atributo, value):
     
     
@@ -181,11 +192,230 @@ def Consultar_clientes(atributo,valor):
         #print(d)
         #None
     graficar(columnas, data)
+'''    
+    
+    
+    
 
+def Consultar_cliente(nombre,apellido1,apellido2):
+    cursor = dame_cursor_local(PATH)
+    sucursales=dame_sucursales()
+    registros=[]
+    datos=[nombre,apellido1,apellido2]
+    idD=[]
+    for i in range(len(datos)):
+        if datos[i] == '':
+            datos[i] = '%%'
+        else:
+            datos[i] = '%'+datos[i]+'%'
+    nombre=datos[0]
+    apellido1=datos[1]
+    apellido2=datos[2]
+    for sucursal in sucursales:
+        idD=0#[]
+        query=("use {}").format(sucursal)
+        cursor.execute(query)
+        query=("select * from Clientes where Nombre like '{}' and ApellidoPaterno like '{}' and ApellidoMaterno like '{}'").format(nombre,apellido1,apellido2)
+        cursor.execute(query)
+        print('paso')
+        for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+            r1=[]
+            idD=idDir
+            print(idD)
+        query=("select * from Direcciones where idDir = {} ").format(idD)
+        print(query)
+        cursor.execute(query)
+        print('pasoasdfa')
+        for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+            r2=[]
+        rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+        registros.append(rf)
+    return(registros)
+        
+        
+def consultaFacil():
+    cursor = dame_cursor_local(PATH)
+    print("tienes el id o el RFC?")
+    print("1.- ID")
+    print("2.- RFC")
+    a=int(input())
+    sucursales=dame_sucursales()
+    registros=[]
+    idD=None
+    if a ==1:
+        iD=input("dame el id: ")
+        for sucursal in sucursales:
+            query=("use {}").format(sucursal)
+            cursor.execute(query)
+            query=("select * from Clientes where idCli = {}").format(iD)
+            cursor.execute(query)
+            for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+                r1=[]
+                idD=idDir
+            query=("select * from Direcciones where idDir = {} ").format(idD)
+            cursor.execute(query)
+            for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+                r2=[]
+            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+            registros.append(rf)
+        return(registros)
+    if a == 2:
+        iD=input("dame el RFC: ")
+        for sucursal in sucursales:
+            query=("use {}").format(sucursal)
+            cursor.execute(query)
+            query=("select * from Clientes where RFC = '{}' ").format(iD)
+            cursor.execute(query)
+            for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+                r1=[]
+                idD=idDir
+            query=("select * from Direcciones where idDir = {} ").format(idD)
+            cursor.execute(query)
+            for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+                r2=[]
+            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+            registros.append(rf)
+        return(registros)
+            
+    
+def Consultar_clientes():
+    columnas = ['IdCli','Nombre','Apellido1','Apellido2','RFC','IdDir', 'Calle', 'Numero','Colonia','Localidad','Estado','CP']
+    print("¿tienes el id del cliente o el rfc?")
+    print("1.- si")
+    print("2.- No")
+    a=int(input())
+    if a == 1:
+        data=consultaFacil()
+        graficar(columnas, data)
+    if a == 2:
+        nombre=input("dame el nombre o nombres,si no lo sabe de enter")
+        apellido1=input("dame el primer apellido, si no lo sabe de enter")
+        apellido2=input("dame el segundo apellido, si no lo sabe de enter")
+        data=Consultar_cliente(nombre,apellido1,apellido2)
+        graficar(columnas,data)
+        
+def Consultar_direccion_id():
+    cursor = dame_cursor_local(PATH)
+    sucursales=dame_sucursales()
+    idDir=int(input("dame el id de la direccion: "))
+    registros=[]
+    for sucursal in sucursales:
+        query=("use {}").format(sucursal)
+        cursor.execute(query)
+        query=("select * from Direcciones where idDir = {}").format(idDir)
+        cursor.execute(query)
+        for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+            registro1=[calle,numero,colonia,localidad,estado,CP]
+        query=("select * from Clientes where idDir = {}").format(idDir)
+        cursor.execute(query)
+        for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+            registro2=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC]
+        rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+        registros.append(rf)
+    #print(registros)
+    return(registros)
+        
+        
+def Consultar_direccion_noID(calle,numero,colonia,localidad,estado,cp):
+    cursor = dame_cursor_local(PATH)
+    sucursales=dame_sucursales()
+    registros=[]
+    dire=None
+    datos=[calle,numero,colonia,localidad,estado,cp]
+    for i in range (len(datos)):
+        if datos[i] == '':
+            datos[i] = '%%'
+        elif datos[i] != '':
+            datos[i] = '%'+datos[i]+'%'
+    calle=datos[0]
+    numero=datos[1]
+    colonia=datos[2]
+    localidad=datos[3]
+    estado = datos[4]
+    cp= datos[5]
+    for sucursal in sucursales:
+        query=("use {}").format(sucursal)
+        cursor.execute(query)
+        query=("select * from Direcciones where calle like '{}' and numero like '{}' and colonia like '{}' and localidad like '{}' and estado like '{}' and CP like '{}' ").format(calle,numero,colonia,localidad,estado,cp)
+        cursor.execute(query)
+        #print(cursor)
+        for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+            dire=idDir
+        query=("select * from Clientes where idDir = '{}'").format(dire)
+        cursor.execute(query)
+        for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+            registro2=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC]
+            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+            registros.append(rf)
+    #print(registros)
+    return(registros)
+    
+def Consultar_direciones():
+    columnas = ['IdCli','Nombre','Apellido1','Apellido2','RFC','IdDir', 'Calle', 'Numero','Colonia','Localidad','Estado','CP']
+    print("sabe la id de la direccion?")
+    print("1.- Si")
+    print("2.- No")
+    a=int(input())
+    if a == 1:
+        data=Consultar_direccion_id()
+        graficar(columnas, data)
+    if a == 2:
+        calle=input("ingrese la calle, si no la sabe de enter")
+        numero=input("ingrese el numero, si no lo sabe de enter")
+        colonia=input("ingrese la colonia, si no la sabe de enter")
+        localidad=input("ingrese la localidad, si no la sabe de enter")
+        estado=input("ingrese el estado, si no lo sabe de enter")
+        cp=input(" ingrese el CP, si no lo sabe de enter")
+        data=Consultar_direccion_noID(calle,numero,colonia,localidad,estado,cp)
+        graficar(columnas, data)
+
+    
+#--------------------------------------------------------------------
+# Crear tabla
+
+def CrearTabla():
+    print('Funcion pendiente')
+    menu()
+    
+def ponTipoDato():
+    print('Inserta el tipo de dato: ')
+    print('Ej.1: INT NOT NULL AUTO_INCREMENT')
+    print('Ej.2: VARCHAR(100)')
+
+    tipo = input()
+    
+    return tipo
+    
+def CrearTablaLocal():
+    with open(PATH+'config.json') as json_file:
+        config = json.load(json_file)
+    cnx = mariadb.connect(**config)
+    cursor = cnx.cursor()
+    #cursor.execute('USE prueba')
+    nombre = input('Nombre de la nueva tabla: ')
+    campos = []
+    tipos = []
+    query = 'CREATE TABLE ' + nombre + ' ('
+    print('Inserta los campos:')
+    while True:
+        campo = (input('Nombre del campo: '))
+        tipo = (ponTipoDato())
+        query += campo +' '+ tipo + ','
+        termina = int(input('Agregar otro campo? si:1 , no:2  :'))
+        if termina == 2:
+            break
+        
+    query += 'IdCli INT, FOREIGN KEY (IdCli) REFERENCES Clientes(IdCli))'
+    #query = query[:len(query)-1] + ')'
+    #query += ')'
+    print ('Query:',query)
+    cursor.execute(query)
+    cursor.close()
+    
 #--------------------------------------------------------------------
 # Interfaz principal
 def mainActualizar():
-    print("¿Que tipo de registro quiere actuslizar?")
+    print("¿Que tipo de registro quiere actualizar?")
     print("1.- usuario")
     print("2.- direccion")
     a=int(input())
@@ -217,7 +447,7 @@ def verificador(a,info):
         print("2.- cambiar")
         opcion=int(input())
         if opcion == 1:
-            consultar(a,info)
+            Consultar_direciones(a,info)
         elif opcion == 2:
             print("ingrese la nueva informacion")
             info=input()
@@ -278,27 +508,33 @@ def verificador(a,info):
 def mainConsultarTodo():
     print("¿Con que dato desea consultar?")
     print("1.- Direcion")
-    print("2.- RFC")
-    print("3.- Nombre")
+    print("2.- Nombre o RFC")
+    #print("3.- Nombre")
     a=int(input())
     if a == 1:
-        print("Ingrese la direccion")
-        direccion=input()
-        verificador(a,direccion)
-    if a == 2:
-        print("Ingrese el RFC")
-        rfc=input()
-        verificador(a,rfc)
-    if a == 3:
-        print("Ingrese el Nombre")
-        nombre=input()
-        verificador(a,nombre)
+        Consultar_direciones()
+        #print("Ingrese la direccion")
+        #direccion=input()
+        #verificador(a,direccion)
+    elif a == 2:
+        Consultar_clientes()
+        #print("Ingrese el RFC")
+        #rfc=input()
+        #verificador(a,rfc)
+        
+    #if a == 3:
+    #    print("Ingrese el Nombre")
+    #    nombre=input()
+    #    verificador(a,nombre)
+
+
 
 def main():
     print("1.- Actualizar informacion")
     print("2.- Consultar informacion")
     print("3.- Crear Nuevo Registro")
-    print("4.- Salir")
+    print("4.- Crear nueva tabla")
+    print("5.- Salir")
         
 def menu():
     main()
@@ -310,6 +546,8 @@ def menu():
     elif opcion == 3:
         insertar()
     elif opcion == 4:
+        CrearTablaLocal()
+    elif opcion == 5:    
         exit()
     else:
         print("opcion invalida, vuelve a intentarlo")
