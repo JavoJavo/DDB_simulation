@@ -329,7 +329,7 @@ def CrearTablaLocal():
     
 #--------------------------------------------------------------------
 # Interfaz principal
-def mainActualizar():
+'''def mainActualizar():
     print("¿Que tipo de registro quiere actualizar?")
     print("1.- usuario")
     print("2.- direccion")
@@ -340,7 +340,7 @@ def mainActualizar():
         actualizarDireccion()
     else:
         print("opcion invalida, vuelve a intentarlo")
-        mainActualizar()
+        mainActualizar()'''
         
 
 def verificador(a,info):
@@ -391,7 +391,7 @@ def verificador(a,info):
         menu()
 
 
-def mainConsultarTodo():
+'''def mainConsultarTodo():
     print("¿Con que dato desea consultar?")
     print("1.- Direcion")
     print("2.- Nombre o RFC")
@@ -399,7 +399,43 @@ def mainConsultarTodo():
     if a == 1:
         Consultar_direciones()
     elif a == 2:
-        Consultar_clientes()
+        Consultar_clientes()'''
+
+
+def mainListar(opcion):
+    opciones=["Actualizar informacion","Consultar informacion","Crear Un Nuevo Registro"]
+    lista=[]
+    diccionario={}
+    with open(PATH+'config.json') as jfile:
+        data=json.load(jfile)
+        db=data['database']
+    query=("select table_name from information_schema.columns where table_schema = '{}' order by table_name, ordinal_position").format(db)
+    cursor.execute(query)
+    for i in cursor:
+        lista.append(i)
+    lista=list(set(lista))
+    print("en donde quieres",opciones[opcion])
+    for i in range(len(lista)):
+        print(i, lista[i][0])
+        diccionario[i]=lista[i][0]
+    seleccion=int(input())
+    if diccionario[seleccion] == 'Clientes' or diccionario[seleccion] == 'Direcciones' :
+        if opcion ==0:
+            print(diccionario[seleccion])
+            actualizar(diccionario[seleccion])
+        if opcion ==1 diccionario[seleccion] == 'Clientes':
+            Consultar_clientes()
+        if opcion == 1 and diccionario[seleccion] == 'Direcciones':
+            Consultar_direciones()
+        if opcion ==2:
+            insertar()
+    else:
+        if opcion== 0:
+            actualizar(diccionario[seleccion])
+        if opcion==1:
+            consGen(diccionario[seleccion])
+        if opcion ==2:
+            insertarGen(diccionario[seleccion])
 
 
 def main():
