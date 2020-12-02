@@ -437,6 +437,28 @@ def mainListar(opcion):
         if opcion ==2:
             insertarGen(diccionario[seleccion])
 
+def consGen(tabla):
+    iD= int(input("Dame el id del cliente"))
+    cursor.execute('SHOW COLUMNS FROM {}'.format(tabla))
+    fields = []
+    registros=[]
+    res=[]
+    for (Field,Type,Null,Key,Default,Extra) in cursor:
+        fields.append(Field)
+    for i in range(len(fields)):
+        query=("select {} from {} where IdCli = {}").format(fields[i],tabla,iD)
+        cursor.execute(query)
+        registro=[]
+        for i in cursor:
+            registro.append(i[0])
+        registros.append(registro)
+    for i in range(len(registros[0])):
+        re=[]
+        for j in range(len(registros)):
+            re.append(registros[j][i])
+        res.append(re)
+    return(re)
+
 
 def main():
     print("1.- Actualizar informacion")
