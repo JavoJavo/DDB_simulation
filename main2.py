@@ -421,6 +421,40 @@ def mainListar(opcion):
     seleccion=int(input())
     if diccionario[seleccion] == 'Clientes' or diccionario[seleccion] == 'Direcciones' :
         if opcion ==0:
+            #print(diccionario[seleccion])
+            actualizar(diccionario[seleccion])
+        if opcion ==1 and diccionario[seleccion] == 'Clientes':
+            Consultar_clientes()
+        if opcion == 1 and diccionario[seleccion] == 'Direcciones':
+            Consultar_direciones()
+        if opcion ==2:
+            insertar()
+    else:
+        if opcion== 0:
+            actualizar(diccionario[seleccion])
+        if opcion==1:
+            data,columns=consGen(diccionario[seleccion])
+            graficar(columns,data)
+        if opcion ==2:
+            insertarGen(diccionario[seleccion])
+    opciones=["Actualizar informacion","Consultar informacion","Crear Un Nuevo Registro"]
+    lista=[]
+    diccionario={}
+    with open(PATH+'config.json') as jfile:
+        data=json.load(jfile)
+        db=data['database']
+    query=("select table_name from information_schema.columns where table_schema = '{}' order by table_name, ordinal_position").format(db)
+    cursor.execute(query)
+    for i in cursor:
+        lista.append(i)
+    lista=list(set(lista))
+    print("en donde quieres",opciones[opcion])
+    for i in range(len(lista)):
+        print(i, lista[i][0])
+        diccionario[i]=lista[i][0]
+    seleccion=int(input())
+    if diccionario[seleccion] == 'Clientes' or diccionario[seleccion] == 'Direcciones' :
+        if opcion ==0:
             print(diccionario[seleccion])
             actualizar(diccionario[seleccion])
         if opcion ==1 diccionario[seleccion] == 'Clientes':
@@ -459,6 +493,22 @@ def consGen(tabla):
         res.append(re)
     return(re)
 
+
+def insertarGen(tabla):
+    cursor.execute('SHOW COLUMNS FROM {}'.format(tabla))
+    fields = []
+    values=[]
+    for (Field,Type,Null,Key,Default,Extra) in cursor:
+        fields.append(Field)
+    for i in range(len(fields)):
+        print("ingrese el valor para",fields[i])
+        valor=input()
+        values.append(valor)
+    
+    query=("insert into {} ({}) values({})").format(tabla,', '.join(fields),str(values)[1:-1])
+    cursor.execute(query)
+    cnx.commit()
+    print("se registro:",values)
 
 def main():
     print("1.- Actualizar informacion")
