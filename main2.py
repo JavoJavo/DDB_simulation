@@ -167,21 +167,24 @@ def Consultar_cliente(nombre,apellido1,apellido2):
         query=("select * from Clientes where Nombre like '{}' and ApellidoPaterno like '{}' and ApellidoMaterno like '{}'").format(nombre,apellido1,apellido2)
         cursor.execute(query)
         print('paso')
-        try:
-            for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
-                r1=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir]
-                idD=idDir
-                print(idD)
-            query=("select * from Direcciones where idDir = {} ").format(idD)
-            print(query)
-            cursor.execute(query)
-            print('pasoasdfa')
-            for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+        #clis = []
+        for it in cursor:
+            (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) = it
+            #r1=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir]
+            idD=idDir
+            print(idD)
+        query=("select * from Direcciones where idDir = {} ").format(idD)
+        print(query)
+        cursor.execute(query)
+        print('pasoasdfa')
+        if idD != 0:
+            for it in cursor:
+                (idDir,calle,numero,colonia,localidad,estado,CP) = it
                 r2=[idDir,calle,numero,colonia,localidad,estado,CP]
             rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+            print(rf)
             registros.append(rf)
-        except:
-            print('ERROR')
+
     return(registros)
         
         
@@ -288,18 +291,28 @@ def Consultar_direccion_noID(calle,numero,colonia,localidad,estado,cp):
     estado = datos[4]
     cp= datos[5]
     for sucursal in sucursales:
+        dire = 0
         query=("use {}").format(sucursal)
         cursor.execute(query)
         query=("select * from Direcciones where calle like '{}' and numero like '{}' and colonia like '{}' and localidad like '{}' and estado like '{}' and CP like '{}' ").format(calle,numero,colonia,localidad,estado,cp)
+        print(query)
         cursor.execute(query)
+        direcs = []
         for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
-            dire=idDir
-        query=("select * from Clientes where idDir = '{}'").format(dire)
-        cursor.execute(query)
-        for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
-            registro2=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC]
-            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
-            registros.append(rf)
+            direcs.append([idDir,calle,numero,colonia,localidad,estado,CP])
+            #dire=idDir
+        clients = []
+        for i in range(len(direcs)):
+            
+            query=("select * from Clientes where idDir = '{}'").format(direcs[i][0])
+            cursor.execute(query)
+            #if dire != 0: 
+            for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+                #registro2=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC]
+                #rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+                direcs[i] = [IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC] + direcs[i]
+                #registros.append(rf)
+        registros = registros + direcs
     return(registros)
     
 def Consultar_direciones():
