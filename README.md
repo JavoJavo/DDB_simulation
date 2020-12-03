@@ -37,7 +37,7 @@ Lo que hace la línea anterior es crear 2 bases de datos, una llamada Pátzcuaro
 4. Crear nuevas tablas
 
 ### Restricción para la creación de nuevas tablas
-Las tablas nuevas que se creen forzosamente estarán conectadas a la tabla Clientes con 'IdCli'.
+Las tablas nuevas que se creen forzosamente estarán conectadas únicamente a la tabla Clientes con 'IdCli'.
 
 
 
