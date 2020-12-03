@@ -337,10 +337,6 @@ def Consultar_direciones():
     
 #--------------------------------------------------------------------
 # Crear tabla
-
-def CrearTabla():
-    print('Funcion pendiente')
-    menu()
     
 def ponTipoDato():
     print('Inserta el tipo de dato: ')
