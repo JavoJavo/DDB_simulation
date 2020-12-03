@@ -14,7 +14,7 @@ def dame_cursor_local(PATH):
         config = json.load(json_file)
     cnx = mariadb.connect(**config)
     cursor = cnx.cursor()
-    return cursor
+    return (cursor,cnx)
 
 def dame_sucursales():
     conn = mariadb.connect(
@@ -51,7 +51,7 @@ def graficar(columnas, data):
 #-------------------------------------------------------------------
 # insertar
 def insertar():
-    
+    '''
     sucs = dame_sucursales()
     i = 0
     for s in sucs:
@@ -59,6 +59,8 @@ def insertar():
         i += 1
     suc = int(input('Elige sucursal: '))
     bd = sucs[suc]
+    '''
+    (cursor,cnx) = dame_cursor_local(PATH)
     print('Inserta datos personales:')
     
     nombre = input('Nombre: ')
@@ -79,7 +81,7 @@ def insertar():
     while (len(CP) != 5):
         CP = input('Codigo postal: ')
 
-    
+    '''
     conn = mariadb.connect(
         user = "javo", 
         password = "b", 
@@ -88,37 +90,64 @@ def insertar():
         ) 
 
     cur = conn.cursor()
-    cur.execute("INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('{}', '{}', '{}','{}', '{}', '{}');".format(calle, numero, colonia, localidad, estado,CP))
-    conn.commit()
+    '''
+    cursor.execute("INSERT INTO Direcciones (calle,  numero, colonia, localidad, estado, CP) VALUES ('{}', '{}', '{}','{}', '{}', '{}');".format(calle, numero, colonia, localidad, estado,CP))
+    cnx.commit()
     
     
-    cur = conn.cursor()
-    cur.execute(" SELECT IdDir FROM Direcciones ORDER BY IdDir DESC LIMIT 1")
-    (IdDir,) = cur
+    cursor = cnx.cursor()
+    cursor.execute(" SELECT IdDir FROM Direcciones ORDER BY IdDir DESC LIMIT 1")
+    (IdDir,) = cursor
     IdDir = IdDir[0]
     
-    cur.execute("INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('{}','{}','{}','{}','{}');".format(nombre, apellidoP, apellidoM, RFC,IdDir))
-    conn.commit()
+    cursor.execute("INSERT INTO Clientes (Nombre,  ApellidoPaterno, ApellidoMaterno, RFC, IdDir) VALUES ('{}','{}','{}','{}','{}');".format(nombre, apellidoP, apellidoM, RFC,IdDir))
+    cnx.commit()
 
-    conn.close()
+    cnx.close()
     menu()
 #--------------------------------------------------------------------
 # actualizar
+def actualizar(tabla):
+    (cursor,cnx) = dame_cursor_local(PATH)
+ 
+    #Id = int(input('Ingrese el ID del cliente: '))
+    cursor.execute('SHOW COLUMNS FROM {}'.format(tabla))
+    fields = []
+    for (Field,Type,Null,Key,Default,Extra) in cursor:
+        if Field[:2] != 'Id':
+            fields.append(Field)
+    values = []
     
-def actualizarUsuario():
-    print('Funcion pendiente')
-    menu()
+    print('Oprima enter si no desea cambiar el campo: ')
+    for i in range(len(fields)):
+        val = input('Ingrese nuevo valor de \'{}\': '.format(fields[i]))
+        values.append(val)
 
-    
-def actualizarDireccion(a, info):
-    print('Funcion pendiente')
-    menu()
+    if tabla == 'Direcciones':
+        Id = int(input('Ingrese el ID de la direccion: '))
+        for i in range(len(fields)):   
+            if values[i] != '':
+                #cursor = dame_cursor_local(PATH)
+                query = "UPDATE {} SET {} = '{}' WHERE IdDir = {}".format(tabla,fields[i],values[i],Id)
+                #print(query)
+                cursor.execute(query)
+                cnx.commit() 
+    else:
+        Id = int(input('Ingrese el ID del cliente: '))
+        for i in range(len(fields)):   
+            if values[i] != '':
+                #cursor = dame_cursor_local(PATH)
+                query = "UPDATE {} SET {} = '{}' WHERE IdCli = {}".format(tabla,fields[i],values[i],Id)
+                #print(query)
+                cursor.execute(query)
+                cnx.commit()
+
 #--------------------------------------------------------------------
 # consultar
 
 
 def Consultar_cliente(nombre,apellido1,apellido2):
-    cursor = dame_cursor_local(PATH)
+    (cursor,cnx) = dame_cursor_local(PATH)
     sucursales=dame_sucursales()
     registros=[]
     datos=[nombre,apellido1,apellido2]
@@ -138,23 +167,26 @@ def Consultar_cliente(nombre,apellido1,apellido2):
         query=("select * from Clientes where Nombre like '{}' and ApellidoPaterno like '{}' and ApellidoMaterno like '{}'").format(nombre,apellido1,apellido2)
         cursor.execute(query)
         print('paso')
-        for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
-            r1=[]
-            idD=idDir
-            print(idD)
-        query=("select * from Direcciones where idDir = {} ").format(idD)
-        print(query)
-        cursor.execute(query)
-        print('pasoasdfa')
-        for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
-            r2=[]
-        rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
-        registros.append(rf)
+        try:
+            for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
+                r1=[IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir]
+                idD=idDir
+                print(idD)
+            query=("select * from Direcciones where idDir = {} ").format(idD)
+            print(query)
+            cursor.execute(query)
+            print('pasoasdfa')
+            for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+                r2=[idDir,calle,numero,colonia,localidad,estado,CP]
+            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+            registros.append(rf)
+        except:
+            print('ERROR')
     return(registros)
         
         
 def consultaFacil():
-    cursor = dame_cursor_local(PATH)
+    (cursor,cnx) = dame_cursor_local(PATH)
     print("tienes el id o el RFC?")
     print("1.- ID")
     print("2.- RFC")
@@ -189,12 +221,13 @@ def consultaFacil():
             for (IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir) in cursor:
                 r1=[]
                 idD=idDir
-            query=("select * from Direcciones where idDir = {} ").format(idD)
-            cursor.execute(query)
-            for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
-                r2=[]
-            rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
-            registros.append(rf)
+            if idD != None:
+                query=("select * from Direcciones where idDir = {} ").format(idD)
+                cursor.execute(query)
+                for (idDir,calle,numero,colonia,localidad,estado,CP) in cursor:
+                    r2=[]
+                rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
+                registros.append(rf)
         return(registros)
             
     
@@ -215,7 +248,7 @@ def Consultar_clientes():
         graficar(columnas,data)
         
 def Consultar_direccion_id():
-    cursor = dame_cursor_local(PATH)
+    (cursor,cnx) = dame_cursor_local(PATH)
     sucursales=dame_sucursales()
     idDir=int(input("dame el id de la direccion: "))
     registros=[]
@@ -236,7 +269,7 @@ def Consultar_direccion_id():
         
         
 def Consultar_direccion_noID(calle,numero,colonia,localidad,estado,cp):
-    cursor = dame_cursor_local(PATH)
+    (cursor,cnx) = dame_cursor_local(PATH)
     sucursales=dame_sucursales()
     registros=[]
     dire=None
@@ -410,6 +443,7 @@ def mainListar(opcion):
         data=json.load(jfile)
         db=data['database']
     query=("select table_name from information_schema.columns where table_schema = '{}' order by table_name, ordinal_position").format(db)
+    (cursor,cnx) = dame_cursor_local(PATH)
     cursor.execute(query)
     for i in cursor:
         lista.append(i)
@@ -457,7 +491,7 @@ def mainListar(opcion):
         if opcion ==0:
             print(diccionario[seleccion])
             actualizar(diccionario[seleccion])
-        if opcion ==1 diccionario[seleccion] == 'Clientes':
+        if opcion ==1 and diccionario[seleccion] == 'Clientes':
             Consultar_clientes()
         if opcion == 1 and diccionario[seleccion] == 'Direcciones':
             Consultar_direciones()
@@ -472,6 +506,7 @@ def mainListar(opcion):
             insertarGen(diccionario[seleccion])
 
 def consGen(tabla):
+    (cursor,cnx) = dame_cursor_local(PATH)
     iD= int(input("Dame el id del cliente"))
     cursor.execute('SHOW COLUMNS FROM {}'.format(tabla))
     fields = []
@@ -491,10 +526,11 @@ def consGen(tabla):
         for j in range(len(registros)):
             re.append(registros[j][i])
         res.append(re)
-    return(re)
+    return(res,fields)
 
 
 def insertarGen(tabla):
+    (cursor,cnx) = dame_cursor_local(PATH)
     cursor.execute('SHOW COLUMNS FROM {}'.format(tabla))
     fields = []
     values=[]
