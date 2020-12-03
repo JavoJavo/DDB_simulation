@@ -5,8 +5,8 @@ Simulating a distributed database.
 (Todavía nos faltan muchas cosas entre ellas el orden y la presentación)   
 Saul Armas y Javier Navarro    
 Bases de Datos Distribuidas   
-
-### El primer paso es instalar algunas cosas que se necesitan, que en este caso son en Ubuntu20 (Linux):
+## Pasos
+### 1. Instalar algunas cosas que se necesitan, en Ubuntu20 (Linux) son:
 #### MariaDB-server  ([referencia](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04)) 
 `sudo apt update`    
 `sudo apt install mariadb-server`     
@@ -21,7 +21,15 @@ Bases de Datos Distribuidas
 `FLUSH PRIVILEGES;`
 #### Tabulador PrettyTable
 `pip3 install prettytable`    
-
+### 2. Clonar el repositorio
+Si no tienes git [instálalo](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) para poder correr clonar con la siguiénte línea:      
+`git clone https://github.com/JavoJavo/DDB_simulation.git`    
+### 3. Pon tus usuario y contraseña (los que creaste en mariadb) en el archivo de configuración (`config.json`)
+Puedes dejar los otros campos como están.  
+### 4. Crear las bases de datos simuladas con registros de ejemplo  
+`python3 crearBases.py`   
+### 5. Haz transacciones de prueba
+`python3 main2.py`
 ### Pasos a seguir: 
 Crear 1 base de datos que será el esquema de las sucursales que hay y las tablas que tiene cada una.
 Crear las 2 bases de datos 2 tablas cada 1. Con 5 registros de prueba cada una.   
