@@ -374,6 +374,33 @@ def CrearTablaLocal():
     print ('Query:',query)
     cursor.execute(query)
     cursor.close()
+    menu()
+    
+def CrearTablaGeneral():
+    sucursales = dame_sucursales()
+    (cursor,cnx) = dame_cursor_local(PATH)
+    nombre = input('Nombre de la nueva tabla: ')
+    campos = []
+    tipos = []
+    query = 'CREATE TABLE ' + nombre + ' ('
+    print('Inserta los campos:')
+    while True:
+        campo = (input('Nombre del campo: '))
+        tipo = (ponTipoDato())
+        query += campo +' '+ tipo + ','
+        termina = int(input('Agregar otro campo? si:1 , no:2  :'))
+        if termina == 2:
+            break
+    query += 'IdCli INT, FOREIGN KEY (IdCli) REFERENCES Clientes(IdCli))'
+    print ('Query:',query)
+    i = 0        
+    for sucursal in sucursales:
+        cursor.execute("USE {}".format(sucursal))
+        cursor.execute(query)
+        i += 1
+    print('Tabla creada en',i,'sucursales.')
+    cursor.close()
+    menu()
     
 #--------------------------------------------------------------------
 # Interfaz principal
@@ -486,6 +513,8 @@ def mainListar(opcion):
             graficar(columns,data)
         if opcion ==2:
             insertarGen(diccionario[seleccion])
+    menu()
+    '''
     opciones=["Actualizar informacion","Consultar informacion","Crear Un Nuevo Registro"]
     lista=[]
     diccionario={}
@@ -519,6 +548,7 @@ def mainListar(opcion):
             consGen(diccionario[seleccion])
         if opcion ==2:
             insertarGen(diccionario[seleccion])
+    '''
 
 def consGen(tabla):
     (cursor,cnx) = dame_cursor_local(PATH)
@@ -581,8 +611,14 @@ def menu():
         #insertar()
         mainListar(2)
     elif opcion == 4:
-        CrearTablaLocal()
-    elif opcion == 5:    
+        print('0 Crear tabla en sucursal local\n1 Crear tabla en todas las sucursales')
+        lugar = int(input())
+        if lugar == 0:
+            CrearTablaLocal()
+        else:
+            CrearTablaGeneral()
+    elif opcion == 5:
+        print('MariaDB dice: '+'\033[1m'+ 'BYE' + '\033[0m')
         exit()
     else:
         print("opcion invalida, vuelve a intentarlo")
