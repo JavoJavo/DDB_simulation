@@ -228,6 +228,8 @@ def consultaFacil():
                     r2=[]
                 rf=(IdCli,Nombre,ApellidoPaterno,ApellidoMaterno,RFC,idDir,calle,numero,colonia,localidad,estado,CP)
                 registros.append(rf)
+                print(rf)
+                break
         return(registros)
             
     
