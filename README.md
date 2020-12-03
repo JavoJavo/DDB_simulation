@@ -6,11 +6,21 @@ Simulating a distributed database.
 Saul Armas y Javier Navarro    
 Bases de Datos Distribuidas   
 
-### El primer paso es instalar 3 paquetes que se necesitan, que en este caso son:
-MariaDB-server   
-Mysql-python-connector    mariadb-python-connector -> pip3 install mariadb    
-PrettyTable -> pip3 install prettytable    
-Usamos Linux (Ubuntu20), ya para instalar los paquetes usamos las instrucciones que muestran en la documentación [aquí](https://mariadb.com/kb/en/about-mariadb-connector-c/#installing-with-apt-get). Y luego para instalar el conector corres el comando pip3 install mariadb.** pendiente     
+### El primer paso es instalar algunas cosas que se necesitan, que en este caso son en Ubuntu20 (Linux):
+#### MariaDB-server  ([referencia](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04)) 
+`sudo apt update`    
+`sudo apt install mariadb-server`     
+`sudo mysql_secure_installation`  <-- Elegir configuración deseada    
+#### Conector python3 ([referencia](https://mariadb.com/kb/en/about-mariadb-connector-c/#installing-with-apt-get))
+`sudo apt-get install libmariadb3`    
+`sudo apt-get install libmariadb-dev`    
+`pip3 install mariadb`     
+#### Crear usuario ([referencia](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04))
+`sudo mariadb`    
+`GRANT ALL ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;`
+`FLUSH PRIVILEGES;`
+#### Tabulador PrettyTable
+`pip3 install prettytable`    
 
 ### Pasos a seguir: 
 Crear 1 base de datos que será el esquema de las sucursales que hay y las tablas que tiene cada una.
