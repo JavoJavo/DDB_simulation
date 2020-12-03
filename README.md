@@ -20,7 +20,7 @@ Bases de Datos Distribuidas
 #### Tabulador PrettyTable
 `pip3 install prettytable`    
 ### 2. Clonar el repositorio
-Si no tienes git [instálalo](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) para poder correr clonar con la siguiénte línea:      
+Si no tienes git [instálalo](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) para poder clonar con la siguiénte línea:      
 `git clone https://github.com/JavoJavo/DDB_simulation.git`    
 ### 3. Pon tus usuario y contraseña (los que creaste en mariadb) en el archivo de configuración (`config.json`)
 Puedes dejar los otros campos como están.  
