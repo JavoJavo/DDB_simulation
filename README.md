@@ -1,8 +1,6 @@
 # DDB_simulation
 Simulating a distributed database.
-
-## Avance
-(Todavía nos faltan muchas cosas entre ellas el orden y la presentación)   
+ 
 Saul Armas y Javier Navarro    
 Bases de Datos Distribuidas   
 ## Instrucciones para usar el simulador
